@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	"sort"
 	"strconv"
+	"time"
 )
 
 func baseStructure() {
@@ -315,21 +317,55 @@ func dfs(root *TreeNode, result *[]int) {
 	dfs(root.Right, result)
 }
 
-func (node *TreeNode) treeNodeNew(index int, data []int) *TreeNode {
-	// 二叉树节点创建
-	if node == nil {
-		return nil
+// func (node *TreeNode) treeNodeNew(index int, data []int) *TreeNode {
+// 	// 二叉树节点创建
+// 	if node == nil {
+// 		return nil
+// 	}
+// 	bin := &TreeNode{data[index], nil, nil}
+// 	// 设置完全二叉树左节点  其特征是深度 *2+1为左节点  +2为右节点
+// 	if index < len(data) && 2*index+1 < len(data) {
+// 		fmt.Println()
+// 		bin.left = treeNodeNew(index*2+1, data)
+// 	}
+// 	if i < len(data) && 2*index+2 < len(data) {
+// 		bin.right = treeNodeNew(index*2+2, data)
+// 	}
+// 	return bin
+// }
+
+func treeNodeTraverse(t *TreeNode) {
+	if t == nil {
+		return
 	}
-	bin := &TreeNode{data[index], nil, nil}
-	// 设置完全二叉树左节点  其特征是深度 *2+1为左节点  +2为右节点
-	if index < len(data) && 2*index+1 < len(data) {
-		fmt.Println()
-		bin.left = treeNodeNew(index*2+1, data)
+	treeNodeTraverse(t.Left)
+	fmt.Println(t.Val, " ")
+	treeNodeTraverse(t.Right)
+}
+
+func treeNodeCreate(n int) *TreeNode {
+	var t *TreeNode
+	rand.Seed(time.Now().Unix())
+	for i := 0; i < 2*n; i++ {
+		temp := rand.Intn(n * 2)
+		t = treeNodeInsert(t, temp)
 	}
-	if i < len(data) && 2*index+2 < len(data) {
-		bin.right = treeNodeNew(index*2+2, data)
+	return t
+}
+
+func treeNodeInsert(t *TreeNode, v int) *TreeNode {
+	if t == nil {
+		return &TreeNode{v, nil, nil}
 	}
-	return bin
+	if v == t.Val {
+		return t
+	}
+	if v < t.Val {
+		t.Left = treeNodeInsert(t.Left, v)
+		return t
+	}
+	t.Right = treeNodeInsert(t.Right, v)
+	return t
 }
 
 func main() {
@@ -340,6 +376,9 @@ func main() {
 	nums := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	fmt.Println(subsets(nums))
 
-	node := treeNodeNew(TreeNode)
-	node = node.treeNodeNew(0, []interface{}{1, 2, 3, 4, 5, 6, 7, 8, 9})
+	fmt.Println("treeNode")
+	tree := treeNodeCreate(10)
+	// node = node.treeNodeNew(0, []interface{}{1, 2, 3, 4, 5, 6, 7, 8, 9})
+	treeNodeTraverse(tree)
+	fmt.Println(tree.Val)
 }
