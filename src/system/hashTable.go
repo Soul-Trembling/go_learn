@@ -39,6 +39,20 @@ func traverse(hash *HashTable) {
 	}
 }
 
+func lookup(hash *HashTable, value int) bool {
+	index := hashFunction(value, hash.Size)
+	if hash.Table[index] != nil {
+		t := hash.Table[index]
+		for t != nil {
+			if t.Value == value {
+				return true
+			}
+			t = t.Next
+		}
+	}
+	return false
+}
+
 func main() {
 	table := make(map[int]*Node, SIZE)
 	hash := &HashTable{Table: table, Size: SIZE}
@@ -47,4 +61,6 @@ func main() {
 		insert(hash, i)
 	}
 	traverse(hash)
+
+	fmt.Println(lookup(hash, 11))
 }
